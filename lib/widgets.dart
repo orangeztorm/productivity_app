@@ -22,12 +22,11 @@ class ProductivityButton extends StatelessWidget{
   }
 }
 
-class SettingButton extends StatelessWidget {
+class SettingsButton extends StatelessWidget {
   final Color color;
   final String text;
   final int value;
-
-  const SettingButton({Key key, this.color, this.text, this.value}) : super(key: key);
+  SettingsButton(this.color, this.text, this.value);
 
   @override
   Widget build(BuildContext context) {
@@ -40,5 +39,4 @@ class SettingButton extends StatelessWidget {
     );
   }
 
-}
 }
