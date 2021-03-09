@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:productivity_app/TimerModel.dart';
+import 'package:productivity_app/screens/splash_screen.dart';
 import 'package:productivity_app/settings.dart';
 import 'package:productivity_app/widgets.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:hive/hive.dart';
 
 import './Timer.dart';
 
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blueGrey,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TimerHompage(),
+      home: SplashScreen(),
     );
   }
 }
