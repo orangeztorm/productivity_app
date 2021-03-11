@@ -2,24 +2,24 @@ import 'package:flutter/material.dart';
 
 typedef CallbackSetting = void Function(String, int);
 
-class ProductivityButton extends StatelessWidget{
+class ProductivityButton extends StatelessWidget {
   final Color color;
   final String text;
   final double size;
   final VoidCallback onPressed;
 
-  const ProductivityButton({Key key,@required this.color,@required this.text,this.size,@required this.onPressed}) : super(key: key);
-
+  ProductivityButton(
+      {@required this.color,
+      @required this.text,
+      @required this.onPressed,
+      this.size});
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      onPressed: null,
-      child: Text(
-        this.text,
-        style: TextStyle(color: Colors.white),
-      ),
+      child: Text(this.text, style: TextStyle(color: Colors.white)),
+      onPressed: this.onPressed,
       color: this.color,
-      minWidth: this.size,
+      minWidth: (this.size != null) ? this.size : 0,
     );
   }
 }
@@ -27,23 +27,17 @@ class ProductivityButton extends StatelessWidget{
 class SettingsButton extends StatelessWidget {
   final Color color;
   final String text;
-  final double size;
   final int value;
   final String setting;
   final CallbackSetting callback;
-  SettingsButton(this.color, this.text, this.size, this.value,
-      this.setting, this.callback);
-
+  SettingsButton(
+      this.color, this.text, this.value, this.setting, this.callback);
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
-      child:Text(
-          this.text,
-          style: TextStyle(color: Colors.white)),
+      child: Text(this.text, style: TextStyle(color: Colors.white)),
       onPressed: () => this.callback(this.setting, this.value),
       color: this.color,
-      minWidth: this.size,
     );
   }
-
 }

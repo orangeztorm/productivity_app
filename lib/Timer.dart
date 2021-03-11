@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:productivity_app/TimerModel.dart';
+import './timermodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CountDownTimer {
@@ -12,7 +12,6 @@ class CountDownTimer {
   int shortBreak = 5;
   int longBreak = 20;
 
-  //
   String returnTime(Duration t) {
     String minutes = (t.inMinutes < 10)
         ? '0' + t.inMinutes.toString()
@@ -20,11 +19,12 @@ class CountDownTimer {
     int numSeconds = t.inSeconds - (t.inMinutes * 60);
     String seconds =
         (numSeconds < 10) ? '0' + numSeconds.toString() : numSeconds.toString();
-    String formattedTime = minutes + ':' + seconds;
+    String formattedTime = minutes + ":" + seconds;
     return formattedTime;
   }
 
   Stream<TimerModel> stream() async* {
+
     yield* Stream.periodic(Duration(seconds: 1), (int a) {
       String time;
       if (this._isActive) {
@@ -39,38 +39,38 @@ class CountDownTimer {
     });
   }
 
-  //
+  Future readSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    work = prefs.getInt('workTime') == null ? 30 : prefs.getInt('workTime');
+    shortBreak = prefs.getInt('shortBreak') == null ? 30 : prefs.getInt('shortBreak');
+    longBreak = prefs.getInt('longBreak') == null ? 30 : prefs.getInt('longBreak');
+  }
+  
+  void stopTimer() {
+    this._isActive = false;
+  }
+
+  void startTimer() {
+    if (_time.inSeconds > 0) {
+      this._isActive = true;
+    }
+  }
+
   void startWork() async{
-    await readSettings();
+    await readSettings(); 
     _radius = 1;
     _time = Duration(minutes: this.work, seconds: 0);
     _fullTime = _time;
   }
 
-  //
-  void stopTimer() {
-    this._isActive = false;
-  }
-
-  //
-  void startTimer() {
-    if (_time.inSeconds < 0) {
-      this._isActive = true;
-    }
-  }
-
   void startBreak(bool isShort) {
+
     _radius = 1;
-    _time = Duration(minutes: (isShort) ? shortBreak : longBreak, seconds: 0);
+    _time = Duration(
+      minutes: (isShort) ? shortBreak: longBreak, 
+      seconds: 0);
     _fullTime = _time;
   }
 
-  Future readSettings() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    work = prefs.getInt('workTime') == null ? 30 : prefs.getInt('workTime');
-    shortBreak =
-        prefs.getInt('shortBreak') == null ? 30 : prefs.getInt('shortBreak');
-    longBreak =
-        prefs.getInt('longBreak') == null ? 30 : prefs.getInt('longBreak');
-  }
+  
 }

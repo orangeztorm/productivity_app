@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './widgets.dart';
 
+
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -9,9 +10,7 @@ class SettingsScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text('Settings'),
         ),
-        body: Container(
-          child: Text('Hello World'),
-        ));
+        body: Settings());
   }
 }
 
@@ -21,8 +20,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  SharedPreferences prefs;
-  TextStyle textStyle = TextStyle(fontSize: 24);
   TextEditingController txtWork;
   TextEditingController txtShort;
   TextEditingController txtLong;
@@ -32,69 +29,67 @@ class _SettingsState extends State<Settings> {
   int workTime;
   int shortBreak;
   int longBreak;
-  double buttonSize = 30;
-
-
+  SharedPreferences prefs;
+  
   @override
   void initState() {
-    TextEditingController txtWork = TextEditingController();
-    TextEditingController txtShort = TextEditingController();
-    TextEditingController txtLong = TextEditingController();
+    txtWork = TextEditingController();
+    txtShort = TextEditingController();
+    txtLong = TextEditingController();
     readSettings();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle = TextStyle(fontSize: 24);
     return Container(
-      child: GridView.count(
-        scrollDirection: Axis.vertical,
-        crossAxisCount: 3,
-        childAspectRatio: 3,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        children: <Widget>[
-          Text('work',style: textStyle),
-          Text(''),
-          Text(''),
-          SettingsButton(Color(0xff455A64), "-", buttonSize, -1, WORKTIME,
-              updateSetting),
-          TextField(
-              style: textStyle,
-              textAlign: TextAlign.center,
-              controller: txtWork,
-              keyboardType: TextInputType.number),
-          SettingsButton(Color(0xff009688), "+", buttonSize, 1, WORKTIME,
-              updateSetting),
-          Text("Short", style: textStyle),
-          Text(""),
-          Text(""),
-          SettingsButton(Color(0xff455A64), "-", buttonSize, -1, SHORTBREAK,
-              updateSetting),
-          TextField(
-              style: textStyle,
-              textAlign: TextAlign.center,
-              controller: txtShort,
-              keyboardType: TextInputType.number),
-          SettingsButton(Color(0xff009688), "+", buttonSize, 1, SHORTBREAK,
-              updateSetting),
-          Text("Long", style: textStyle,),
-          Text(""),
-          Text(""),
-          SettingsButton(Color(0xff455A64), "-", buttonSize, -1,LONGBREAK,
-              updateSetting),
-          TextField(
-              style: textStyle,
-              textAlign: TextAlign.center,
-              controller: txtLong,
-              keyboardType: TextInputType.number),
-          SettingsButton(Color(0xff009688), "+", buttonSize, 1, LONGBREAK,
-              updateSetting),
-        ],
-        padding: const EdgeInsets.all(20.0),
-      ),
-    );
+        child: GridView.count(
+      scrollDirection: Axis.vertical,
+      crossAxisCount: 3,
+      childAspectRatio: 3,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      children: <Widget>[
+        Text("Work", style: textStyle),
+        Text(""),
+        Text(""),
+        SettingsButton(Color(0xff455A64), "-", -1, WORKTIME, updateSetting),
+        TextField(
+            style: textStyle,
+            controller: txtWork,
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number),
+        SettingsButton(Color(0xff009688), "+", 1, WORKTIME, updateSetting),
+        Text("Short", style: textStyle),
+        Text(""),
+        Text(""),
+        SettingsButton(Color(0xff455A64), "-", -1, SHORTBREAK, updateSetting),
+        TextField(
+            style: textStyle,
+            textAlign: TextAlign.center,
+            controller: txtShort,
+            keyboardType: TextInputType.number),
+        SettingsButton(Color(0xff009688), "+", 1, SHORTBREAK, updateSetting),
+        Text(
+          "Long",
+          style: textStyle,
+        ),
+        Text(""),
+        Text(""),
+        SettingsButton( Color(0xff455A64), "-",-1, LONGBREAK, updateSetting
+        ),
+        TextField(
+            style: textStyle,
+            textAlign: TextAlign.center,
+            controller: txtLong,
+            keyboardType: TextInputType.number),
+        SettingsButton(Color(0xff009688), "+", 1, LONGBREAK, updateSetting),
+      ],
+      padding: const EdgeInsets.all(20.0),
+    ));
   }
+
   readSettings() async {
     prefs = await SharedPreferences.getInstance();
     int workTime = prefs.getInt(WORKTIME);
@@ -116,13 +111,13 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  void updateSetting(String key, int value){
-    switch(key){
+  void updateSetting(String key, int value) {
+    switch (key) {
       case WORKTIME:
         {
           int workTime = prefs.getInt(WORKTIME);
           workTime += value;
-          if(workTime >=1 && workTime <= 180){
+          if (workTime >= 1 && workTime <= 180) {
             prefs.setInt(WORKTIME, workTime);
             setState(() {
               txtWork.text = workTime.toString();
